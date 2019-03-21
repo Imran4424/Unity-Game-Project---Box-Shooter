@@ -18,15 +18,15 @@ public class Rotate : MonoBehaviour {
 		// do the appropriate rotation based on the way state
 		switch(way)
 		{
-		case whichWayToRotate.AroundX:
-			transform.Rotate(Vector3.right * Time.deltaTime * speed);
-			break;
-		case whichWayToRotate.AroundY:
-			transform.Rotate(Vector3.up * Time.deltaTime * speed);
-			break;
-		case whichWayToRotate.AroundZ:
-			transform.Rotate(Vector3.forward * Time.deltaTime * speed);
-			break;
+			case whichWayToRotate.AroundX:
+				transform.Rotate(Vector3.right * Time.deltaTime * speed);
+				break;
+			case whichWayToRotate.AroundY:
+				transform.Rotate(Vector3.up * Time.deltaTime * speed);
+				break;
+			case whichWayToRotate.AroundZ:
+				transform.Rotate(Vector3.forward * Time.deltaTime * speed);
+				break;
 		}	
 	}
 }
