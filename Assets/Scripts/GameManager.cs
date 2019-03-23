@@ -1,21 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
-
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
 	// make game manager public static so can access this from other scripts
 	public static GameManager gm;
 
 	// public variables
-	public int score=0;
+	public int score = 0;
 
 	public bool canBeatLevel = false;
-	public int beatLevelScore=0;
+	public int beatLevelScore = 0;
 
-	public float startTime=5.0f;
-	
+	public float startTime = 5.0f;
+
 	public Text mainScoreDisplay;
 	public Text mainTimerDisplay;
 
@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour {
 	public bool gameIsOver = false;
 
 	public GameObject playAgainButtons;
+
+	public GameObject exitButton;
 	public string playAgainLevelToLoad;
 
 	public GameObject nextLevelButtons;
@@ -34,14 +36,18 @@ public class GameManager : MonoBehaviour {
 	private float currentTime;
 
 	// setup the game
-	void Start () {
+	void Start ()
+	{
 
 		// set the current time to the startTime specified
 		currentTime = startTime;
 
 		// get a reference to the GameManager component for use by other scripts
-		if (gm == null) 
-			gm = this.gameObject.GetComponent<GameManager>();
+		if (gm == null)
+		{
+
+			gm = this.gameObject.GetComponent<GameManager> ();
+		}
 
 		// init scoreboard to 0
 		mainScoreDisplay.text = "0";
@@ -52,7 +58,15 @@ public class GameManager : MonoBehaviour {
 
 		// inactivate the playAgainButtons gameObject, if it is set
 		if (playAgainButtons)
+		{
 			playAgainButtons.SetActive (false);
+
+		}
+
+		if (exitButton)
+		{
+			exitButton.SetActive (false);
+		}
 
 		// inactivate the nextLevelButtons gameObject, if it is set
 		if (nextLevelButtons)
@@ -60,20 +74,28 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// this is the main game event loop
-	void Update () {
-		if (!gameIsOver) {
-			if (canBeatLevel && (score >= beatLevelScore)) {  // check to see if beat game
+	void Update ()
+	{
+		if (!gameIsOver)
+		{
+			if (canBeatLevel && (score >= beatLevelScore))
+			{ // check to see if beat game
 				BeatLevel ();
-			} else if (currentTime < 0) { // check to see if timer has run out
+			}
+			else if (currentTime < 0)
+			{ // check to see if timer has run out
 				EndGame ();
-			} else { // game playing state, so update the timer
+			}
+			else
+			{ // game playing state, so update the timer
 				currentTime -= Time.deltaTime;
-				mainTimerDisplay.text = currentTime.ToString ("0.00");				
+				mainTimerDisplay.text = currentTime.ToString ("0.00");
 			}
 		}
 	}
 
-	void EndGame() {
+	void EndGame ()
+	{
 		// game is over
 		gameIsOver = true;
 
@@ -83,17 +105,25 @@ public class GameManager : MonoBehaviour {
 		// activate the gameOverScoreOutline gameObject, if it is set 
 		if (gameOverScoreOutline)
 			gameOverScoreOutline.SetActive (true);
-	
+
 		// activate the playAgainButtons gameObject, if it is set 
 		if (playAgainButtons)
+		{
 			playAgainButtons.SetActive (true);
+		}
+
+		if (exitButton)
+		{
+			exitButton.SetActive (true);
+		}
 
 		// reduce the pitch of the background music, if it is set 
 		if (musicAudioSource)
 			musicAudioSource.pitch = 0.5f; // slow down the music
 	}
-	
-	void BeatLevel() {
+
+	void BeatLevel ()
+	{
 		// game is over
 		gameIsOver = true;
 
@@ -107,7 +137,7 @@ public class GameManager : MonoBehaviour {
 		// activate the nextLevelButtons gameObject, if it is set 
 		if (nextLevelButtons)
 			nextLevelButtons.SetActive (true);
-		
+
 		// reduce the pitch of the background music, if it is set 
 		if (musicAudioSource)
 			musicAudioSource.pitch = 0.5f; // slow down the music
@@ -119,10 +149,10 @@ public class GameManager : MonoBehaviour {
 		// increase the score by the scoreAmount and update the text UI
 		score += scoreAmount;
 		mainScoreDisplay.text = score.ToString ();
-		
+
 		// increase the time by the timeAmount
 		currentTime += timeAmount;
-		
+
 		// don't let it go negative
 		if (currentTime < 0)
 			currentTime = 0.0f;
@@ -139,12 +169,18 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel (playAgainLevelToLoad);
 	}
 
+	public void Exit ()
+	{
+		// we are just loading a scene (or reloading this scene)
+		// which is an easy way to restart the level
+		Application.Quit ();
+	}
+
 	// public function that can be called to go to the next level of the game
 	public void NextLevel ()
 	{
 		// we are just loading the specified next level (scene)
 		Application.LoadLevel (nextLevelToLoad);
 	}
-	
 
 }
